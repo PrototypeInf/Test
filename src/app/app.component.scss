@@ -1,0 +1,15 @@
+.loader{
+    position: absolute;
+    z-index: 1001;
+    background: rgba(0, 0, 128, 0.3);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    .spiner-container{
+        position: absolute;
+        top: 45%;
+        left: 45%;
+    }
+}

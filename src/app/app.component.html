@@ -1,12 +1,8 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <app-header></app-header>
 
+<div *ngIf="loading" class="loader">
+    <mat-spinner class="spiner-container"></mat-spinner>
+</div>
 
-<button mat-button>Basic</button>
-<button (click)="test()" mat-button color="primary">Primary</button>
-<button mat-button color="accent">Accent</button>
-<button mat-button color="warn">Warn</button>
-<button mat-button disabled>Disabled</button>
-<a mat-button routerLink=".">Link</a>
-<h1>{{loading}}</h1>
 <router-outlet></router-outlet>
