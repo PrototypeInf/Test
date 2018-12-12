@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   loading = true;
+
+  test() {
+    this.loading = !this.loading;
+
+  }
 }
