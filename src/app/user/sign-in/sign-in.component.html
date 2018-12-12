@@ -1,0 +1,14 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <div class="large-box mat-elevation-z4">
+    <mat-form-field>
+      <input formControlName="email" type="email" matInput placeholder="Email" required>
+    </mat-form-field>
+    <br />
+
+    <mat-form-field>
+      <input formControlName="password" type="password" matInput placeholder="Password">
+    </mat-form-field>
+    <hr />
+    <button [disabled]="!formValid" class="module-btn" mat-raised-button color="accent">OK</button>
+  </div>
+</form>
