@@ -1,0 +1,20 @@
+.header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+
+    .mat-button{
+        font-size: 1em;
+        margin: 5px;
+    }
+}
+.icon {
+    padding: 0 1em;
+
+  }
+  
+  .spacer {
+    flex: 1 1 auto;
+  }
