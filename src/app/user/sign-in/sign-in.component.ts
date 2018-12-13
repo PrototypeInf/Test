@@ -8,16 +8,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class SignInComponent implements OnInit {
 
-  registerForm: FormGroup;
-  get f() { return this.registerForm.controls; }
+  loginrForm: FormGroup;
+  get f() { return this.loginrForm.controls; }
   submitted = false;
 
-  get formValid() { return this.registerForm.valid; }
+  get formValid() { return this.loginrForm.valid; }
 
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.registerForm = this.formBuilder.group({
+    this.loginrForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(3)]]
   });

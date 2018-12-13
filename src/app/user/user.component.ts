@@ -12,4 +12,7 @@ export class UserComponent implements OnInit {
   ngOnInit() {
   }
 
+  singUpRes($event) {
+      console.log($event);
+  }
 }

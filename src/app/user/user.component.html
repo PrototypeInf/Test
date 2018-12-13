@@ -1,15 +1,13 @@
 <mat-tab-group dynamicHeight>
   <mat-tab label="Sign in">
     <div class="tab-container">
-      
-        <app-sign-in></app-sign-in>
+
+      <app-sign-in></app-sign-in>
     </div>
   </mat-tab>
   <mat-tab label="Sign up">
     <div class="tab-container">
-      <div class="large-box mat-elevation-z4">
-        <app-sign-up></app-sign-up>
-      </div>
+      <app-sign-up (registered_Ev)="singUpRes($event)"></app-sign-up>
     </div>
   </mat-tab>
 </mat-tab-group>

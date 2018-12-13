@@ -1,3 +1,25 @@
-<p>
-  sign-up works!
-</p>
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+  <div class="large-box mat-elevation-z4">
+    <mat-form-field>
+      <input name="UserName" [(ngModel)]="signUpForm.UserName" type="text" matInput placeholder="User name" required>
+    </mat-form-field>
+    <br />
+    <mat-form-field>
+      <input name="Password" [(ngModel)]="signUpForm.Password" type="password" matInput placeholder="Password" required
+        minlength="3">
+    </mat-form-field>
+    <br />
+    <mat-form-field>
+      <input name="Email" [(ngModel)]="signUpForm.Email" type="email" matInput placeholder="Email" required email>
+    </mat-form-field>
+    <br />
+    <mat-form-field>
+      <input name="Location" [(ngModel)]="signUpForm.Location" type="text" matInput placeholder="Location" required
+        minlength="3">
+    </mat-form-field>
+    <hr />
+    <div class="module-container-actions">
+      <button [disabled]="!form.valid" class="module-btn" mat-raised-button color="accent">OK</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,22 @@
+.spacer {
+    flex: 1 1 auto;
+  }
+  .large-box {
+    margin: 16px;
+    padding: 16px;
+    border-radius: 8px;
+
+    height: 50%;
+    min-height: 15em;
+    width: 100%;
+    min-width: 20em;
+  }
+  .module-btn{
+      float:right;
+  }
+  .module-container-actions{
+      display: flow-root;
+  }
+  mat-form-field{
+      width: 100%;
+  }

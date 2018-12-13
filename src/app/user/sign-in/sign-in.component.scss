@@ -1,3 +1,6 @@
+mat-form-field{
+  width: 100%;
+}
 .spacer {
     flex: 1 1 auto;
   }
@@ -14,9 +17,4 @@
   .module-btn{
       float:right;
   }
-
-  .msg-error{
-    display: inline-block;
-    padding: 10px;
-    color: red;
-  }
+  
