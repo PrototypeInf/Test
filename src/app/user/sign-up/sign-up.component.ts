@@ -44,6 +44,8 @@ export class SignUpComponent implements OnInit {
           this.toastrService.success('Registered');
           this.registered_Ev.emit(true);
           this.reset(form);
+        } else {
+          this.toastrService.error('Registering failed');
         }
       },
         err => {

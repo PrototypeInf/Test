@@ -6,8 +6,9 @@ import { User } from './user.model';
   providedIn: 'root'
 })
 export class UserService {
-
   readonly rootUrl = 'http://localhost:35257/';
+  private _isAuterized = false;
+  get isAuterized() { return this._isAuterized; }
 
   constructor(private http: HttpClient) { }
 
@@ -18,17 +19,29 @@ export class UserService {
       Email: user.Email,
       Location: user.Location
     };
-    const reqHeader = new HttpHeaders({'No-Auth' : 'True'});
-    return this.http.post(`${this.rootUrl}api/User/Register`, body, {headers : reqHeader});
+    const reqHeader = new HttpHeaders({ 'No-Auth': 'True' });
+    return this.http.post(`${this.rootUrl}api/User/Register`, body, { headers: reqHeader });
   }
 
-  userAuthentication(userName, password) {
-    const data = `username=${userName}&password=${password}&grant_type=password`;
-    const reqHeader = new HttpHeaders({ 'Content-Type': 'application/x-www-urlencoded', 'No-Auth' : 'True' });
-    return this.http.post(`${this.rootUrl}token`, data, { headers: reqHeader });
+  userAuthentication(email, password) {
+    const data = `username=${email}&password=${password}&grant_type=password`;
+    const reqHeader = new HttpHeaders({ 'Content-Type': 'application/x-www-urlencoded', 'No-Auth': 'True' });
+    const res = this.http.post(`${this.rootUrl}token`, data, { headers: reqHeader });
+    return res;
+  }
+
+  signIn(token: string) {
+    console.log('ok - ', token);
+    localStorage.setItem('userToken', token);
+    this._isAuterized = true;
+  }
+
+  loggOff() {
+    localStorage.removeItem('userToken');
+    this._isAuterized = false;
   }
 
   getUserClaims() {
-   return  this.http.get(`${this.rootUrl}api/GetUserClaims`);
+    return this.http.get(`${this.rootUrl}api/GetUserClaims`);
   }
 }
