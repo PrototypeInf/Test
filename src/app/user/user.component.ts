@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
+  selectedTabIndex = 0;
 
   constructor() { }
 
@@ -13,6 +14,8 @@ export class UserComponent implements OnInit {
   }
 
   singUpRes($event) {
-      console.log($event);
+      if ($event) {
+        this.selectedTabIndex = 0;
+      }
   }
 }
