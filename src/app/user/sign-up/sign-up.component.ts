@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { User } from '../user.model';
 import { UserService } from '../user.service';
 import { AppService } from 'src/app/app.service';
+import { ToastrService  } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sign-up',
@@ -15,7 +16,8 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private appService: AppService
+    private appService: AppService,
+    private toastrService: ToastrService
   ) { }
 
   ngOnInit() {
@@ -34,18 +36,18 @@ export class SignUpComponent implements OnInit {
     };
   }
   onSubmit(form: NgForm) {
-    console.log(this.signUpForm);
     this.appService.loading = true;
     this.userService.registerUser(this.signUpForm)
       .subscribe((data: any) => {
         this.appService.loading = false;
-        console.log('res:', data);
         if (data.Succeeded === true) {
+          this.toastrService.success('Registered');
           this.registered_Ev.emit(true);
           this.reset(form);
         }
       },
         err => {
+          this.toastrService.error('Registering failed');
           this.appService.loading = false;
         }
       );
