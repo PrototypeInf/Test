@@ -35,18 +35,15 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit() {
-    this.appService.loading = true;
     const email = this.loginrForm.get('email').value;
     const password = this.loginrForm.get('password').value;
     this.userService.userAuthentication(email, password)
       .subscribe((data: any) => {
         this.userService.signIn(data.access_token);
-        this.appService.loading = false;
         this.router.navigate(['/']);
       },
         (err: HttpErrorResponse) => {
           this.userService.loggOff();
-          this.appService.loading = false;
           this.toastrService.error('Could not sign in');
         }
       );

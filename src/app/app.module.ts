@@ -19,6 +19,8 @@ import { AppService } from './app.service';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { CustomersComponent } from './customers/customers.component';
+import { GlobalSettingsService } from './Shared/global-settings.service';
+import { CustomersService } from './customers/customers.service';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,8 @@ import { CustomersComponent } from './customers/customers.component';
     )
   ],
   providers: [
+    CustomersService,
+    GlobalSettingsService,
     UserService,
     AppService,
     {

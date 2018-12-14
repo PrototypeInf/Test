@@ -32,14 +32,13 @@ export class SignUpComponent implements OnInit {
       UserName: '',
       Password: '',
       Email: '',
-      Location: ''
+      Location: '',
+      Name: ''
     };
   }
   onSubmit(form: NgForm) {
-    this.appService.loading = true;
     this.userService.registerUser(this.signUpForm)
       .subscribe((data: any) => {
-        this.appService.loading = false;
         if (data.Succeeded === true) {
           this.toastrService.success('Registered');
           this.registered_Ev.emit(true);
@@ -50,7 +49,6 @@ export class SignUpComponent implements OnInit {
       },
         err => {
           this.toastrService.error('Registering failed');
-          this.appService.loading = false;
         }
       );
   }

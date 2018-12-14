@@ -1,23 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from './user.model';
+import { GlobalSettingsService } from '../Shared/global-settings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  readonly rootUrl = 'http://localhost:35257/';
+  private rootUrl = this.globalSettingsService.rootUrl;
   private _isAuterized = false;
   get isAuterized() { return this._isAuterized; }
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private globalSettingsService: GlobalSettingsService
+    ) { }
 
   registerUser(user: User) {
     const body: User = {
       UserName: user.UserName,
       Password: user.Password,
       Email: user.Email,
-      Location: user.Location
+      Location: user.Location,
+      Name: user.Name
     };
     const reqHeader = new HttpHeaders({ 'No-Auth': 'True' });
     return this.http.post(`${this.rootUrl}api/User/Register`, body, { headers: reqHeader });
@@ -31,7 +36,6 @@ export class UserService {
   }
 
   signIn(token: string) {
-    console.log('ok - ', token);
     localStorage.setItem('userToken', token);
     this._isAuterized = true;
   }

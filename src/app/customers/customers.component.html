@@ -1,3 +1,33 @@
-<p>
-  customers works!
-</p>
+<div class="page-header">
+<mat-form-field class="search-field">
+        <input type="text" matInput placeholder="Search">
+        <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
+<div class="action-container">
+        <mat-icon class="act active" matSuffix>view_module</mat-icon>
+        <mat-icon class="act" matSuffix>view_list</mat-icon>
+</div>
+</div>
+
+<div class="box-large mat-elevation-z4">
+    <h3>Суперське</h3>
+    <h5>Location</h5>
+    <hr/>
+    <button mat-stroked-button>Orders</button>
+</div>
+<div class="box-large mat-elevation-z4">
+2
+</div>
+<div class="box-large mat-elevation-z4">
+3
+</div>
+<div class="box-large mat-elevation-z4">
+4
+</div>
+
+<mat-paginator [length]="pg.length"
+              [pageSize]="pg.pageSize"
+              [pageSizeOptions]="pg.pageSizeOptions"
+              (page)="pgEv($event)"
+              class="paginator">
+</mat-paginator>
