@@ -9,14 +9,29 @@ import { Customers, CustomersRespond } from './customers.model';
 export class CustomersService {
   private rootUrl = this.globalSettingsService.rootUrl + 'api/Customers/';
   reqHeader = new HttpHeaders({ 'Content-Type': 'application/x-www-urlencoded', 'No-Auth': 'True' });
+  dataStart: number;
+  dataMaxLength: number;
 
   constructor(
     private globalSettingsService: GlobalSettingsService,
     private http: HttpClient
   ) { }
 
-  getAll(Start, Length) {
-    const data = `Start=${Start}&Length=${Length}`;
+  setAmountOfData(Start: number, Length: number) {
+    this.dataStart = Start;
+    this.dataMaxLength = Length;
+  }
+
+  getAll() {
+    const data = `Start=${this.dataStart}&Length=${this.dataMaxLength}`;
     return this.http.get<CustomersRespond>(`${this.rootUrl}GetAll?${data}`);
+  }
+
+  search(txt: string) {
+    if (!txt) {
+      return this.getAll();
+    }
+    const data = `Txt=${txt}&Start=${this.dataStart}&Length=${this.dataMaxLength}`;
+    return this.http.get<CustomersRespond>(`${this.rootUrl}Search?${data}`);
   }
 }
