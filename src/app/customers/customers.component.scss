@@ -15,7 +15,14 @@
     margin-left: 1em;
 }
 
+.search{
+    cursor: pointer;
+}
+
 .page-header{
+    form{
+        display: inline-block;
+    }
     .action-container{
         float: right;
         margin-right: 2em;

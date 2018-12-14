@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GlobalSettingsService } from '../Shared/global-settings.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AppService } from '../app.service';
+import { Customers, CustomersRespond } from './customers.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +12,11 @@ export class CustomersService {
 
   constructor(
     private globalSettingsService: GlobalSettingsService,
-    private http: HttpClient,
-    private appService: AppService,
+    private http: HttpClient
   ) { }
 
-  getAll() {
-    const res = this.http.get(`${this.rootUrl}GetAll?Start=10&Length=5`)
-      .subscribe((dataRes) => {
-        console.log(dataRes);
-      },
-        err => {
-        }
-      );
+  getAll(Start, Length) {
+    const data = `Start=${Start}&Length=${Length}`;
+    return this.http.get<CustomersRespond>(`${this.rootUrl}GetAll?${data}`);
   }
 }
