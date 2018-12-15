@@ -21,6 +21,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { CustomersComponent } from './customers/customers.component';
 import { GlobalSettingsService } from './Shared/global-settings.service';
 import { CustomersService } from './customers/customers.service';
+import { CustomerOrdersPopupComponent } from './customers/customer-orders-popup/customer-orders-popup.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { CustomersService } from './customers/customers.service';
     UserComponent,
     SignInComponent,
     SignUpComponent,
-    CustomersComponent
+    CustomersComponent,
+    CustomerOrdersPopupComponent
   ],
   imports: [
     FormsModule,
@@ -58,6 +60,9 @@ import { CustomersService } from './customers/customers.service';
       useClass: AuthInterceptor,
       multi: true
     }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    CustomerOrdersPopupComponent
+  ]
 })
 export class AppModule { }

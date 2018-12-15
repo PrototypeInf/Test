@@ -18,7 +18,7 @@
     <h3>{{customer.Name}}</h3>
     <h5>{{customer.Location}}</h5>
     <p>Id: {{customer.Id}}</p>
-    <button *ngIf="cardHoveredId == customer.Id" mat-stroked-button>Orders</button>
+    <button *ngIf="cardHoveredId == customer.Id" (click) = "ordersListShow(customer.Id)" mat-stroked-button>Orders</button>
 </div>
 
 <mat-paginator [length]="pageEvent.length" 

@@ -18,7 +18,6 @@ export class UserService {
 
   registerUser(user: User) {
     const body: User = {
-      UserName: user.UserName,
       Password: user.Password,
       Email: user.Email,
       Location: user.Location,

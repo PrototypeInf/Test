@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomersService } from './customers.service';
-import { PageEvent } from '@angular/material';
+import { PageEvent, MatDialog } from '@angular/material';
 import { Customers, CustomersRespond } from './customers.model';
+import { ToastrService } from 'ngx-toastr';
+import { CustomerOrdersPopupComponent } from './customer-orders-popup/customer-orders-popup.component';
 
 @Component({
   selector: 'app-customers',
@@ -14,7 +16,11 @@ export class CustomersComponent implements OnInit {
   customers: Customers[];
   cardHoveredId: number;
 
-  constructor(private customersService: CustomersService) { }
+  constructor(
+    private customersService: CustomersService,
+    private toastrService: ToastrService,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     this.cardHoveredId = undefined;
@@ -26,6 +32,21 @@ export class CustomersComponent implements OnInit {
     setTimeout(() => {
       this.getCustomers();
     }, 0);
+  }
+
+  ordersListShow(customerId): void {
+    this.customersService.getOrderList(customerId)
+      .subscribe((res) => {
+        this.dialog.open(CustomerOrdersPopupComponent, {
+          minWidth: '300px',
+          width: '40%',
+          data: res
+        });
+      },
+        err => {
+          this.toastrService.error('Server error');
+        }
+      );
   }
 
   initPage(data: CustomersRespond) {
@@ -48,7 +69,10 @@ export class CustomersComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         this.initPage(res);
-      });
+      },
+        err => {
+          this.toastrService.error('Server error');
+        });
   }
 
   onPageEv(pageEvent: PageEvent) {

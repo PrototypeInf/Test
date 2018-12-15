@@ -34,4 +34,9 @@ export class CustomersService {
     const data = `Txt=${txt}&Start=${this.dataStart}&Length=${this.dataMaxLength}`;
     return this.http.get<CustomersRespond>(`${this.rootUrl}Search?${data}`);
   }
+
+  getOrderList(CustomerId: number|string) {
+    const data = `CustomerId=${CustomerId}&Start=${this.dataStart}&Length=${this.dataMaxLength}`;
+    return this.http.get<any>(`${this.rootUrl}GetOrdersList?${data}`);
+  }
 }

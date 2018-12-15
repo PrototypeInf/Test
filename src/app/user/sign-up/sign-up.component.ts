@@ -16,7 +16,6 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private appService: AppService,
     private toastrService: ToastrService
   ) { }
 
@@ -29,7 +28,6 @@ export class SignUpComponent implements OnInit {
       form.reset();
     }
     this.signUpForm = {
-      UserName: '',
       Password: '',
       Email: '',
       Location: '',
