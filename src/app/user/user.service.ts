@@ -77,6 +77,12 @@ export class UserService {
     this._isAuterized = false;
   }
 
+  tryLogIn() {
+    if (localStorage.getItem('userToken')) {
+      this._isAuterized = true;
+    }
+  }
+
   getUserClaims() {
     return this.http.get(`${this.rootUrl}api/GetUserClaims`);
   }

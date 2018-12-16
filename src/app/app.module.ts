@@ -24,6 +24,7 @@ import { CustomersService } from './customers/customers.service';
 import { CustomerOrdersPopupComponent } from './customers/customer-orders-popup/customer-orders-popup.component';
 import { CustomerEditPopupComponent } from './customers/customer-edit-popup/customer-edit-popup.component';
 import { OrderComponent } from './order/order.component';
+import { ConfirmPopupComponent } from './Shared/confirm-popup/confirm-popup.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { OrderComponent } from './order/order.component';
     CustomersComponent,
     CustomerOrdersPopupComponent,
     CustomerEditPopupComponent,
-    OrderComponent
+    OrderComponent,
+    ConfirmPopupComponent
   ],
   imports: [
     FormsModule,
@@ -67,7 +69,8 @@ import { OrderComponent } from './order/order.component';
   bootstrap: [AppComponent],
   entryComponents: [
     CustomerOrdersPopupComponent,
-    CustomerEditPopupComponent
+    CustomerEditPopupComponent,
+    ConfirmPopupComponent
   ]
 })
 export class AppModule { }

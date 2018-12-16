@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Order } from 'src/app/order/order.model';
 import { CustomersService } from '../customers.service';
 import { UserService } from 'src/app/user/user.service';
 import { OrderService } from 'src/app/order/order.service';
+import { ConfirmPopupData, ConfirmPopupComponent } from 'src/app/Shared/confirm-popup/confirm-popup.component';
 
 export interface CustomerOrdersPopupData {
   CustomersId: number;
@@ -16,7 +17,7 @@ export interface CustomerOrdersPopupData {
   styleUrls: ['./customer-orders-popup.component.scss']
 })
 export class CustomerOrdersPopupComponent implements OnInit {
-  get isAuterized() {return this.userService.isAuterized; }
+  get isAuterized() { return this.userService.isAuterized; }
   displayedColumns: string[];
   ProductName: string;
   Price: string;
@@ -26,8 +27,9 @@ export class CustomerOrdersPopupComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public datas: CustomerOrdersPopupData,
     private customersService: CustomersService,
     private userService: UserService,
-    private orderService: OrderService
-    ) {}
+    private orderService: OrderService,
+    private dialog: MatDialog,
+  ) { }
 
   ngOnInit() {
     this.displayedColumns = ['Id', 'ProductName', 'Price'];
@@ -38,22 +40,33 @@ export class CustomerOrdersPopupComponent implements OnInit {
 
   updateOrderList() {
     this.customersService.getOrderList(this.datas.CustomersId)
-            .subscribe(
-              (httpRes) => {
-                this.datas.data = httpRes;
-                this.ProductName = undefined;
-                this.Price = undefined;
-              },
-              () => {}
-            );
+      .subscribe(
+        (httpRes) => {
+          this.datas.data = httpRes;
+          this.ProductName = undefined;
+          this.Price = undefined;
+        },
+        () => { }
+      );
   }
   onDeleteOrder(orderId) {
-    this.orderService.delete(orderId).subscribe(
-      () => {
-        this.updateOrderList();
-      },
-      () => {}
-      );
+    const dataSend: ConfirmPopupData = {
+      message: 'Confirm order removal'
+    };
+    this.dialog.open(ConfirmPopupComponent, {
+      data: dataSend
+    })
+      .afterClosed().subscribe(result => {
+        if (!result) {
+          return;
+        }
+        this.orderService.delete(orderId).subscribe(
+          () => {
+            this.updateOrderList();
+          },
+          () => { }
+        );
+      });
   }
 
   onAddOrder() {
@@ -68,7 +81,7 @@ export class CustomerOrdersPopupComponent implements OnInit {
         () => {
           this.updateOrderList();
         },
-        () => {}
+        () => { }
       );
   }
 

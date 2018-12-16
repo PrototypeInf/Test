@@ -14,15 +14,12 @@ export interface CustomerEditPopupData {
   styleUrls: ['./customer-edit-popup.component.scss']
 })
 export class CustomerEditPopupComponent implements OnInit {
-  data: CustomerEditPopupData;
-
   constructor(
     public dialogRef: MatDialogRef<CustomerEditPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public incData: CustomerEditPopupData
+    @Inject(MAT_DIALOG_DATA) public data: CustomerEditPopupData
     ) {}
 
   ngOnInit() {
-    this.data = this.incData;
   }
 
   onNoClick(): void {

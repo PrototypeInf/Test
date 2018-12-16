@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CustomerOrdersPopupComponent } from './customer-orders-popup/customer-orders-popup.component';
 import { CustomerEditPopupComponent, CustomerEditPopupData } from './customer-edit-popup/customer-edit-popup.component';
 import { UserService } from '../user/user.service';
+import { ConfirmPopupComponent, ConfirmPopupData } from '../Shared/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-customers',
@@ -13,7 +14,7 @@ import { UserService } from '../user/user.service';
   styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
-  get isAuterized() {return this.userService.isAuterized; }
+  get isAuterized() { return this.userService.isAuterized; }
 
   pageSizeOptions = [10, 12, 32, 100];
   pageEvent: PageEvent;
@@ -44,6 +45,27 @@ export class CustomersComponent implements OnInit {
     }, 0);
   }
 
+  deleteCustomer(customerId) {
+    const dataSend: ConfirmPopupData = {
+      message: 'Confirm customer removal'
+    };
+    this.dialog.open(ConfirmPopupComponent, {
+      data: dataSend
+    })
+    .afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.customersService.delete(customerId)
+      .subscribe(
+        () => {
+          this.getCustomers();
+        },
+        () => { }
+      );
+    });
+  }
+
   addCustomer() {
     const sendData: CustomerEditPopupData = {
       title: 'New customer',
@@ -61,13 +83,13 @@ export class CustomersComponent implements OnInit {
       .afterClosed().subscribe(res => {
         if (res) {
           this.customersService.add(res)
-          .subscribe(
-            (httpRes) => {
-              this.getCustomers();
-            },
-            () => {
-            }
-          );
+            .subscribe(
+              (httpRes) => {
+                this.getCustomers();
+              },
+              () => {
+              }
+            );
         }
       });
   }

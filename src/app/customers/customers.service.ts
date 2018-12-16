@@ -13,34 +13,53 @@ import { Order } from '../order/order.model';
 })
 export class CustomersService {
   private rootUrl = this.globalSettingsService.rootUrl + 'api/Customers/';
-  reqHeader = new HttpHeaders({ 'Content-Type': 'application/x-www-urlencoded', 'No-Auth': 'True' });
-  dataStart: number;
-  dataMaxLength: number;
+  private reqHeaderNoAuth: HttpHeaders;
+  private reqHeaderPostAuth: HttpHeaders;
+  private dataStart: number;
+  private dataMaxLength: number;
 
   constructor(
     private globalSettingsService: GlobalSettingsService,
     private http: HttpClient,
     private toastrService: ToastrService
-  ) { }
+  ) {
+    this.reqHeaderNoAuth = new HttpHeaders({ 'Content-Type': 'application/x-www-urlencoded', 'No-Auth': 'True' });
+    this.reqHeaderPostAuth = new HttpHeaders({ 'Content-Type': 'application/json' });
+  }
 
   setAmountOfData(Start: number, Length: number) {
     this.dataStart = Start;
     this.dataMaxLength = Length;
   }
 
+  delete(customerId: number | string) {
+    const data = `Id=${customerId}`;
+    const res = this.http.delete(`${this.rootUrl}Delete?${data}`, { headers: this.reqHeaderPostAuth })
+      .pipe(
+        map((httpRes) => {
+          this.toastrService.success('Customer has been deleted');
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Customer not deleted');
+          return throwError(err);
+        })
+      );
+    return res;
+  }
+
   add(customer: Customer) {
-    const reqHeader = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const res = this.http.post<Customer>(`${this.rootUrl}AddCustomer`, customer, { headers: reqHeader })
-    .pipe(
-      map((httpRes) => {
-        this.toastrService.success('Customer has been added');
-        return httpRes;
-      }),
-      catchError(err => {
-        this.toastrService.error('Customer not added');
-        return throwError(err);
-      })
-    );
+    const res = this.http.post<Customer>(`${this.rootUrl}AddCustomer`, customer, { headers: this.reqHeaderPostAuth })
+      .pipe(
+        map((httpRes) => {
+          this.toastrService.success('Customer has been added');
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Customer not added');
+          return throwError(err);
+        })
+      );
     return res;
   }
 
@@ -70,31 +89,30 @@ export class CustomersService {
   getOrderList(CustomerId: number | string) {
     const data = `CustomerId=${CustomerId}&Start=${this.dataStart}&Length=${this.dataMaxLength}`;
     const res = this.http.get<any>(`${this.rootUrl}GetOrdersList?${data}`)
-    .pipe(
-      map((httpRes) => {
-        return httpRes;
-      }),
-      catchError(err => {
-        this.toastrService.error('Server error');
-        return throwError(err);
-      })
-    );
+      .pipe(
+        map((httpRes) => {
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Server error');
+          return throwError(err);
+        })
+      );
     return res;
   }
 
   setCustomerOrder(order: Order) {
-    const reqHeader = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const res = this.http.post<Order>(`${this.rootUrl}AddCustomerOrder`, order, { headers: reqHeader })
-    .pipe(
-      map((httpRes) => {
-        this.toastrService.success('Order has been added');
-        return httpRes;
-      }),
-      catchError(err => {
-        this.toastrService.error('Order not added');
-        return throwError(err);
-      })
-    );
+    const res = this.http.post<Order>(`${this.rootUrl}AddCustomerOrder`, order, { headers: this.reqHeaderPostAuth })
+      .pipe(
+        map((httpRes) => {
+          this.toastrService.success('Order has been added');
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Order not added');
+          return throwError(err);
+        })
+      );
     return res;
   }
 }

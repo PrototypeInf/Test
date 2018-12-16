@@ -11,8 +11,8 @@ import { throwError } from 'rxjs';
 })
 export class OrderService {
   private rootUrl = this.globalSettingsService.rootUrl + 'api/Orders/';
-  headersNoAuth: HttpHeaders;
-  headersPostAuth: HttpHeaders;
+  private headersNoAuth: HttpHeaders;
+  private headersPostAuth: HttpHeaders;
 
 
   constructor(

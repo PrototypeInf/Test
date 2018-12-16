@@ -16,9 +16,10 @@ export class AppComponent implements OnInit, OnDestroy {
   get loading() { return this.appService.loading; }
 
   ngOnInit() {
+    this.userService.tryLogIn();
   }
 
   ngOnDestroy() {
-    this.userService.loggOff();
+    // this.userService.loggOff();
   }
 }
