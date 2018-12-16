@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Order } from 'src/app/order/order.model';
 import { CustomersService } from '../customers.service';
 import { UserService } from 'src/app/user/user.service';
+import { OrderService } from 'src/app/order/order.service';
 
 export interface CustomerOrdersPopupData {
   CustomersId: number;
@@ -24,7 +25,8 @@ export class CustomerOrdersPopupComponent implements OnInit {
     public dialogRef: MatDialogRef<CustomerOrdersPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public datas: CustomerOrdersPopupData,
     private customersService: CustomersService,
-    private userService: UserService
+    private userService: UserService,
+    private orderService: OrderService
     ) {}
 
   ngOnInit() {
@@ -33,6 +35,27 @@ export class CustomerOrdersPopupComponent implements OnInit {
       this.displayedColumns.push('Actions');
     }
   }
+
+  updateOrderList() {
+    this.customersService.getOrderList(this.datas.CustomersId)
+            .subscribe(
+              (httpRes) => {
+                this.datas.data = httpRes;
+                this.ProductName = undefined;
+                this.Price = undefined;
+              },
+              () => {}
+            );
+  }
+  onDeleteOrder(orderId) {
+    this.orderService.delete(orderId).subscribe(
+      () => {
+        this.updateOrderList();
+      },
+      () => {}
+      );
+  }
+
   onAddOrder() {
     const order: Order = {
       CustomersId: this.datas.CustomersId,
@@ -43,15 +66,7 @@ export class CustomerOrdersPopupComponent implements OnInit {
     this.customersService.setCustomerOrder(order)
       .subscribe(
         () => {
-          this.customersService.getOrderList(this.datas.CustomersId)
-            .subscribe(
-              (httpRes) => {
-                this.datas.data = httpRes;
-                this.ProductName = undefined;
-                this.Price = undefined;
-              },
-              () => {}
-            );
+          this.updateOrderList();
         },
         () => {}
       );
