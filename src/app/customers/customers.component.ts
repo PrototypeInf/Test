@@ -82,7 +82,10 @@ export class CustomersComponent implements OnInit {
         this.dialog.open(CustomerOrdersPopupComponent, {
           minWidth: '300px',
           width: '40%',
-          data: res
+          data: {
+            CustomersId: customerId,
+            data: res
+          }
         });
       },
         err => {

@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import { map, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { Order } from '../order/order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +76,22 @@ export class CustomersService {
       }),
       catchError(err => {
         this.toastrService.error('Server error');
+        return throwError(err);
+      })
+    );
+    return res;
+  }
+
+  setCustomerOrder(order: Order) {
+    const reqHeader = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const res = this.http.post<Order>(`${this.rootUrl}AddCustomerOrder`, order, { headers: reqHeader })
+    .pipe(
+      map((httpRes) => {
+        this.toastrService.success('Order has been added');
+        return httpRes;
+      }),
+      catchError(err => {
+        this.toastrService.error('Order not added');
         return throwError(err);
       })
     );

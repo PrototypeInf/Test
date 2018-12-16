@@ -23,6 +23,7 @@ import { GlobalSettingsService } from './Shared/global-settings.service';
 import { CustomersService } from './customers/customers.service';
 import { CustomerOrdersPopupComponent } from './customers/customer-orders-popup/customer-orders-popup.component';
 import { CustomerEditPopupComponent } from './customers/customer-edit-popup/customer-edit-popup.component';
+import { OrderComponent } from './order/order.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { CustomerEditPopupComponent } from './customers/customer-edit-popup/cust
     SignUpComponent,
     CustomersComponent,
     CustomerOrdersPopupComponent,
-    CustomerEditPopupComponent
+    CustomerEditPopupComponent,
+    OrderComponent
   ],
   imports: [
     FormsModule,

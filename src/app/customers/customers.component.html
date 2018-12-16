@@ -18,7 +18,7 @@
     <div *ngSwitchCase="'view_module'">
         <div *ngFor="let customer of customers"  
             class="box-large mat-elevation-z4"
-            (mouseenter)="onCardEnter(customer.Id)" 
+            (mouseenter)="onCardEnter(customer.Id)"
             (mouseleave)="onCardLeave()">
             <h3>{{customer.Name}}</h3>
             <h5>{{customer.Location}}</h5>
