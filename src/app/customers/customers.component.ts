@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomersService } from './customers.service';
 import { PageEvent, MatDialog } from '@angular/material';
-import { Customers, CustomersRespond } from './customers.model';
+import { Customer, CustomersRespond } from './customers.model';
 import { ToastrService } from 'ngx-toastr';
 import { CustomerOrdersPopupComponent } from './customer-orders-popup/customer-orders-popup.component';
+import { CustomerEditPopupComponent, CustomerEditPopupData } from './customer-edit-popup/customer-edit-popup.component';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-customers',
@@ -11,27 +13,67 @@ import { CustomerOrdersPopupComponent } from './customer-orders-popup/customer-o
   styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
+  get isAuterized() {return this.userService.isAuterized; }
+
   pageSizeOptions = [10, 12, 32, 100];
   pageEvent: PageEvent;
-  customers: Customers[];
+  customers: Customer[];
   cardHoveredId: number;
+  pageType: string;
+  displayedColumns: string[] = ['Id', 'Name', 'Location', 'Actions'];
 
   constructor(
     private customersService: CustomersService,
     private toastrService: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
+    this.pageType = 'view_module';
     this.cardHoveredId = undefined;
+
     this.pageEvent = new PageEvent();
     this.pageEvent.pageIndex = 0;
     this.pageEvent.length = 0;
     this.pageEvent.pageSize = this.pageSizeOptions[1];
     this.pageEvent.previousPageIndex = 0;
+
     setTimeout(() => {
       this.getCustomers();
     }, 0);
+  }
+
+  addCustomer() {
+    const sendData: CustomerEditPopupData = {
+      title: 'New customer',
+      message: 'Add a new customer',
+      data: {
+        Location: '',
+        Name: ''
+      }
+    };
+
+    this.dialog.open(CustomerEditPopupComponent, {
+      panelClass: 'popup',
+      data: sendData
+    })
+      .afterClosed().subscribe(res => {
+        if (res) {
+          this.customersService.add(res)
+          .subscribe(
+            (httpRes) => {
+              this.getCustomers();
+            },
+            () => {
+            }
+          );
+        }
+      });
+  }
+
+  setPageType(pageType) {
+    this.pageType = pageType;
   }
 
   ordersListShow(customerId): void {
@@ -44,7 +86,6 @@ export class CustomersComponent implements OnInit {
         });
       },
         err => {
-          this.toastrService.error('Server error');
         }
       );
   }
@@ -66,13 +107,13 @@ export class CustomersComponent implements OnInit {
     const Length = this.pageEvent.pageSize;
     this.customersService.setAmountOfData(Start, Length);
     this.customersService.getAll()
-      .subscribe((res) => {
-        console.log(res);
-        this.initPage(res);
-      },
+      .subscribe(
+        (res) => {
+          this.initPage(res);
+        },
         err => {
-          this.toastrService.error('Server error');
-        });
+        }
+      );
   }
 
   onPageEv(pageEvent: PageEvent) {

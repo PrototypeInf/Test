@@ -1,9 +1,9 @@
-export class Customers {
+export class Customer {
     Name: string;
     Location: string;
 }
 
 export class CustomersRespond {
     Length: number;
-    Data: Customers[];
+    Data: Customer[];
 }

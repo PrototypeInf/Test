@@ -30,7 +30,8 @@
 
         .act{
             cursor: pointer;
-            margin: 3px;
+            margin: 5px;
+            vertical-align: middle;
         }
         .act.active{
             background-color: lightblue;
@@ -38,3 +39,18 @@
     }
 }
 
+.pageType-view_list{
+    width: 100%;
+}
+
+table{
+    width: 100%;
+    .hovered{
+        background: rgba(0, 0, 128, 0.2);
+    }
+}
+
+.popup{
+    min-width: '300px';
+    width: '40%';
+}

@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GlobalSettingsService } from '../Shared/global-settings.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Customers, CustomersRespond } from './customers.model';
+import { Customer, CustomersRespond } from './customers.model';
+import { ToastrService } from 'ngx-toastr';
+
+import { map, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +18,8 @@ export class CustomersService {
 
   constructor(
     private globalSettingsService: GlobalSettingsService,
-    private http: HttpClient
+    private http: HttpClient,
+    private toastrService: ToastrService
   ) { }
 
   setAmountOfData(Start: number, Length: number) {
@@ -22,9 +27,35 @@ export class CustomersService {
     this.dataMaxLength = Length;
   }
 
+  add(customer: Customer) {
+    const reqHeader = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const res = this.http.post<Customer>(`${this.rootUrl}AddCustomer`, customer, { headers: reqHeader })
+    .pipe(
+      map((httpRes) => {
+        this.toastrService.success('Customer has been added');
+        return httpRes;
+      }),
+      catchError(err => {
+        this.toastrService.error('Customer not added');
+        return throwError(err);
+      })
+    );
+    return res;
+  }
+
   getAll() {
     const data = `Start=${this.dataStart}&Length=${this.dataMaxLength}`;
-    return this.http.get<CustomersRespond>(`${this.rootUrl}GetAll?${data}`);
+    const res = this.http.get<CustomersRespond>(`${this.rootUrl}GetAll?${data}`)
+      .pipe(
+        map((httpRes) => {
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Server error');
+          return throwError(err);
+        })
+      );
+    return res;
   }
 
   search(txt: string) {
@@ -35,8 +66,18 @@ export class CustomersService {
     return this.http.get<CustomersRespond>(`${this.rootUrl}Search?${data}`);
   }
 
-  getOrderList(CustomerId: number|string) {
+  getOrderList(CustomerId: number | string) {
     const data = `CustomerId=${CustomerId}&Start=${this.dataStart}&Length=${this.dataMaxLength}`;
-    return this.http.get<any>(`${this.rootUrl}GetOrdersList?${data}`);
+    const res = this.http.get<any>(`${this.rootUrl}GetOrdersList?${data}`)
+    .pipe(
+      map((httpRes) => {
+        return httpRes;
+      }),
+      catchError(err => {
+        this.toastrService.error('Server error');
+        return throwError(err);
+      })
+    );
+    return res;
   }
 }

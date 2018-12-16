@@ -22,6 +22,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { GlobalSettingsService } from './Shared/global-settings.service';
 import { CustomersService } from './customers/customers.service';
 import { CustomerOrdersPopupComponent } from './customers/customer-orders-popup/customer-orders-popup.component';
+import { CustomerEditPopupComponent } from './customers/customer-edit-popup/customer-edit-popup.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { CustomerOrdersPopupComponent } from './customers/customer-orders-popup/
     SignInComponent,
     SignUpComponent,
     CustomersComponent,
-    CustomerOrdersPopupComponent
+    CustomerOrdersPopupComponent,
+    CustomerEditPopupComponent
   ],
   imports: [
     FormsModule,
@@ -46,7 +48,7 @@ import { CustomerOrdersPopupComponent } from './customers/customer-orders-popup/
       {
         timeOut: 4000,
         positionClass: 'toast-top-right',
-        preventDuplicates: true
+        preventDuplicates: false
       }
     )
   ],
@@ -62,7 +64,8 @@ import { CustomerOrdersPopupComponent } from './customers/customer-orders-popup/
     }],
   bootstrap: [AppComponent],
   entryComponents: [
-    CustomerOrdersPopupComponent
+    CustomerOrdersPopupComponent,
+    CustomerEditPopupComponent
   ]
 })
 export class AppModule { }

@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <p>{{data.message}}</p>
+  <form #form="ngForm" action="#">
+    <mat-form-field>
+      <input name="Name" matInput [(ngModel)]="data.data.Name" placeholder="Name" required>
+    </mat-form-field>
+    <br/>
+    <mat-form-field>
+      <input name="Location" matInput [(ngModel)]="data.data.Location" placeholder="Location" required>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button (click)="onNoClick()" mat-stroked-button >Сancel</button>
+  <button (click)="onOkClick()" [disabled]="!form.valid" mat-stroked-button color="primary">Add</button>
+</div>

@@ -38,15 +38,11 @@ export class SignUpComponent implements OnInit {
     this.userService.registerUser(this.signUpForm)
       .subscribe((data: any) => {
         if (data.Succeeded === true) {
-          this.toastrService.success('Registered');
           this.registered_Ev.emit(true);
           this.reset(form);
-        } else {
-          this.toastrService.error('Registering failed');
         }
       },
         err => {
-          this.toastrService.error('Registering failed');
         }
       );
   }
