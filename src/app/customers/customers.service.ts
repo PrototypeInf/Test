@@ -113,7 +113,17 @@ export class CustomersService {
       return this.getAll();
     }
     const data = `Txt=${txt}&Start=${this.dataStart}&Length=${this.dataMaxLength}`;
-    return this.http.get<CustomersRespond>(`${this.rootUrl}Search?${data}`);
+    const res = this.http.get<CustomersRespond>(`${this.rootUrl}Search?${data}`)
+      .pipe(
+        map((httpRes) => {
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Server error');
+          return throwError(err);
+        })
+      );
+    return res;
   }
 
   getOrderList(CustomerId: number | string) {

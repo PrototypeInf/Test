@@ -22,6 +22,7 @@ export class CustomersComponent implements OnInit {
   cardHoveredId: number;
   pageType: string;
   displayedColumns: string[] = ['Id', 'Name', 'Location', 'Actions'];
+  searchTxt: string;
 
   constructor(
     private customersService: CustomersService,
@@ -39,6 +40,7 @@ export class CustomersComponent implements OnInit {
     this.pageEvent.length = 0;
     this.pageEvent.pageSize = this.pageSizeOptions[1];
     this.pageEvent.previousPageIndex = 0;
+    this.setRange();
 
     setTimeout(() => {
       this.getCustomers();
@@ -144,16 +146,20 @@ export class CustomersComponent implements OnInit {
   }
 
   onSearch(txt) {
+    this.searchTxt = txt;
     this.customersService.search(txt)
       .subscribe((res) => {
         this.initPage(res);
       });
   }
 
-  getCustomers() {
+  setRange() {
     const Start = this.pageEvent.pageIndex * this.pageEvent.pageSize;
     const Length = this.pageEvent.pageSize;
     this.customersService.setAmountOfData(Start, Length);
+  }
+
+  getCustomers() {
     this.customersService.getAll()
       .subscribe(
         (res) => {
@@ -166,6 +172,11 @@ export class CustomersComponent implements OnInit {
 
   onPageEv(pageEvent: PageEvent) {
     this.pageEvent = pageEvent;
+    this.setRange();
+    if (this.searchTxt) {
+      this.onSearch(this.searchTxt);
+      return;
+    }
     this.getCustomers();
   }
 

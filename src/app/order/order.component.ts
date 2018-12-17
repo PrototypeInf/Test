@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
-import { OrderService, OrdersRespond, CustomerOrders } from './order.service';
+import { OrderService, CustomerOrders, OrdersRespondGroup } from './order.service';
 
 @Component({
   selector: 'app-order',
@@ -15,6 +15,7 @@ export class OrderComponent implements OnInit {
   displayedColumns: string[] = ['CustomersId', 'CustomersName', 'CustomerOrders', 'TotalPrice'];
   customerOrdersdisplayedColumns: string[] = ['Id', 'ProductName', 'Price'];
   customerOrders: CustomerOrders;
+  searchTxt: string;
 
   constructor(
     private oderService: OrderService
@@ -28,36 +29,46 @@ export class OrderComponent implements OnInit {
     this.pageEvent.length = 0;
     this.pageEvent.pageSize = this.pageSizeOptions[1];
     this.pageEvent.previousPageIndex = 0;
+    this.setRange();
 
     setTimeout(() => {
       this.getOrders();
     }, 0);
   }
 
-  async getOrders() {
-    try {
+  setRange() {
     const Start = this.pageEvent.pageIndex * this.pageEvent.pageSize;
     const Length = this.pageEvent.pageSize;
     this.oderService.setAmountOfData(Start, Length);
-    const httpRes = await this.oderService.getAll().toPromise();
-    this.initPage(httpRes);
-    } catch (err) {}
   }
 
-  initPage(data: OrdersRespond) {
+  async getOrders() {
+    try {
+      const httpRes = await this.oderService.getAll().toPromise();
+      this.initPage(httpRes);
+    } catch (err) { }
+  }
+
+  initPage(data: OrdersRespondGroup) {
     this.pageEvent.length = data.Length;
     this.customerOrders = data.CustomerOrders;
   }
 
-  onSearch(txt) {
-    /*this.customersService.search(txt)
-      .subscribe((res) => {
-        this.initPage(res);
-      });*/
+  async onSearch(txt) {
+    try {
+      this.searchTxt = txt;
+      const httpRes = await this.oderService.search(txt).toPromise();
+      this.initPage(httpRes);
+    } catch (err) { }
   }
 
   onPageEv(pageEvent: PageEvent) {
     this.pageEvent = pageEvent;
+    this.setRange();
+    if (this.searchTxt) {
+      this.onSearch(this.searchTxt);
+      return;
+    }
     this.getOrders();
   }
 

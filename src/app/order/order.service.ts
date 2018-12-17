@@ -13,7 +13,7 @@ export interface CustomerOrders {
   TotalPrice: number;
 }
 
-export interface OrdersRespond {
+export interface OrdersRespondGroup {
   Length: number;
   CustomerOrders: CustomerOrders;
 }
@@ -42,9 +42,12 @@ export class OrderService {
     this.dataMaxLength = Length;
   }
 
-  getAll() {
-    const data = `Start=${this.dataStart}&Length=${this.dataMaxLength}`;
-    const res = this.http.get<OrdersRespond>(`${this.rootUrl}GetAll?${data}`)
+  search(txt: string) {
+    if (!txt) {
+      return this.getAll();
+    }
+    const data = `Txt=${txt}&Start=${this.dataStart}&Length=${this.dataMaxLength}`;
+    const res = this.http.get<OrdersRespondGroup>(`${this.rootUrl}Search?${data}`)
       .pipe(
         map((httpRes) => {
           return httpRes;
@@ -57,19 +60,34 @@ export class OrderService {
     return res;
   }
 
-  delete(orderId: number|string) {
+  getAll() {
+    const data = `Start=${this.dataStart}&Length=${this.dataMaxLength}`;
+    const res = this.http.get<OrdersRespondGroup>(`${this.rootUrl}GetAll?${data}`)
+      .pipe(
+        map((httpRes) => {
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Server error');
+          return throwError(err);
+        })
+      );
+    return res;
+  }
+
+  delete(orderId: number | string) {
     const data = `Id=${orderId}`;
     const res = this.http.delete<Order>(`${this.rootUrl}Delete?${data}`, { headers: this.headersPostAuth })
-    .pipe(
-      map((httpRes) => {
-        this.toastrService.success('Order has been deleted');
-        return httpRes;
-      }),
-      catchError(err => {
-        this.toastrService.error('Order not deleted');
-        return throwError(err);
-      })
-    );
+      .pipe(
+        map((httpRes) => {
+          this.toastrService.success('Order has been deleted');
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Order not deleted');
+          return throwError(err);
+        })
+      );
     return res;
   }
 
