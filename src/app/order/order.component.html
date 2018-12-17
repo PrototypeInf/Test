@@ -1,3 +1,73 @@
-<p>
-  order works!
-</p>
+<!--header-->
+<div class="page-header">
+  <form (ngSubmit)="onSearch(search.value)" action="#">
+      <mat-form-field class="search-field">
+          <input #search="ngModel" name="search" ngModel  type="text" matInput placeholder="Search">
+          <mat-icon  class="search" (click)="onSearch(search.value)"  matSuffix>search</mat-icon>    
+      </mat-form-field>
+  </form>
+</div>
+
+<!--Container-->
+<table mat-table [dataSource]="customerOrders" class="mat-elevation-z8">
+  <!-- CustomersId Column -->
+  <ng-container matColumnDef="CustomersId">
+      <th mat-header-cell *matHeaderCellDef> Customers Id </th>
+      <td mat-cell *matCellDef="let element"> {{element.CustomersId}} </td>
+  </ng-container>
+
+  <!-- CustomersName Column -->
+  <ng-container matColumnDef="CustomersName">
+      <th mat-header-cell *matHeaderCellDef> Customer name </th>
+      <td mat-cell *matCellDef="let element"> {{element.CustomersName}} </td>
+  </ng-container>
+
+    <!-- CustomerOrders datas -->
+  <ng-container matColumnDef="CustomerOrders">
+    <th mat-header-cell *matHeaderCellDef> Customer orders </th>
+    <td mat-cell *matCellDef="let element"> 
+      <!-- Orders datas -->
+      <div class="subTable">
+        <table mat-table [dataSource]="element.Orders">
+          <ng-container matColumnDef="Id">
+            <th mat-header-cell *matHeaderCellDef> Id </th>
+            <td mat-cell *matCellDef="let co"> {{co.Id}} </td>
+          </ng-container>
+          <ng-container matColumnDef="ProductName">
+            <th mat-header-cell *matHeaderCellDef> Product name </th>
+            <td mat-cell *matCellDef="let co"> {{co.ProductName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="Price">
+            <th mat-header-cell *matHeaderCellDef> Price </th>
+            <td mat-cell *matCellDef="let co"> {{co.Price}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="customerOrdersdisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: customerOrdersdisplayedColumns;">
+          </tr>
+        </table>
+      </div>
+    </td>
+  </ng-container>
+
+    <!-- TotalCost Column -->
+  <ng-container matColumnDef="TotalPrice">
+    <th mat-header-cell *matHeaderCellDef> Total price </th>
+    <td mat-cell *matCellDef="let element"> {{element.TotalPrice}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      (mouseenter)="onCardEnter(row.CustomersId)" 
+      (mouseleave)="onCardLeave()"
+      [class.hovered] = "cardHoveredId == row.CustomersId">
+  </tr>
+</table>
+
+
+<!--paginator-->
+<mat-paginator [length]="pageEvent.length" 
+              [pageSize]="pageEvent.pageSize" 
+              [pageSizeOptions]="pageSizeOptions" 
+              (page)="onPageEv($event)"
+              class="paginator">
+</mat-paginator>

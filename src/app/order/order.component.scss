@@ -1,0 +1,15 @@
+table{
+    width: 100%;
+    .hovered{
+        background: rgba(0, 0, 128, 0.2);
+    }
+    table{
+        background: inherit;
+    }
+}
+
+.subTable{
+    overflow: auto;
+    max-height: 10em;    
+    width: 30em;
+}
