@@ -36,7 +36,7 @@ export class UserService {
           if (httpRes.Succeeded === true) {
             this.toastrService.success('Registered');
           } else {
-            this.toastrService.error('Registering failed');
+            this.toastrService.error(httpRes.Errors[0]);
           }
           return httpRes;
         }),
