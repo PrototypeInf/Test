@@ -26,6 +26,7 @@
             <div *ngIf="cardHoveredId == customer.Id">
                 <button (click) = "ordersListShow(customer.Id)"  mat-stroked-button>Orders</button>
                 <button (click) = "deleteCustomer(customer.Id)" *ngIf="isAuterized" mat-stroked-button color="warn">Delete</button>
+                <button (click) = "editCustomer(customer.Id)" *ngIf="isAuterized" mat-stroked-button color="primary">Edit</button>
             </div>
         </div>
     </div>
@@ -56,6 +57,7 @@
                 <td mat-cell *matCellDef="let element"> 
                     <button (click) = "ordersListShow(element.Id)" mat-stroked-button>Orders</button>
                     <button (click) = "deleteCustomer(element.Id)" *ngIf="isAuterized" mat-stroked-button color="warn">Delete</button>
+                    <button (click) = "editCustomer(element.Id)" *ngIf="isAuterized" mat-stroked-button color="primary">Edit</button>
                 </td>
             </ng-container>
         

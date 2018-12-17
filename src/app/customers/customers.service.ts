@@ -32,6 +32,36 @@ export class CustomersService {
     this.dataMaxLength = Length;
   }
 
+  edit(customer: Customer) {
+    const res = this.http.put<Customer>(`${this.rootUrl}Edit`, customer, { headers: this.reqHeaderPostAuth })
+      .pipe(
+        map((httpRes) => {
+          this.toastrService.success('Customer has been changed');
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Customer not changed');
+          return throwError(err);
+        })
+      );
+    return res;
+  }
+
+  get(customerId) {
+    const data = `Id=${customerId}`;
+    const res = this.http.get<Customer>(`${this.rootUrl}Get?${data}`)
+      .pipe(
+        map((httpRes) => {
+          return httpRes;
+        }),
+        catchError(err => {
+          this.toastrService.error('Server error');
+          return throwError(err);
+        })
+      );
+    return res;
+  }
+
   delete(customerId: number | string) {
     const data = `Id=${customerId}`;
     const res = this.http.delete(`${this.rootUrl}Delete?${data}`, { headers: this.reqHeaderPostAuth })

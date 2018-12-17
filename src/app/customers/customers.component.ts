@@ -52,18 +52,41 @@ export class CustomersComponent implements OnInit {
     this.dialog.open(ConfirmPopupComponent, {
       data: dataSend
     })
-    .afterClosed().subscribe(result => {
-      if (!result) {
+      .afterClosed().subscribe(result => {
+        if (!result) {
+          return;
+        }
+        this.customersService.delete(customerId)
+          .subscribe(
+            () => {
+              this.getCustomers();
+            },
+            () => { }
+          );
+      });
+  }
+
+  async editCustomer(customerId) {
+    try {
+      const customer = await this.customersService.get(customerId).toPromise();
+      const sendData: CustomerEditPopupData = {
+        title: 'Edit customer',
+        message: `Edit customer with Id - ${customer.Id}`,
+        data: customer
+      };
+
+      const dialogRes = await this.dialog.open(CustomerEditPopupComponent, {
+        data: sendData
+      }).afterClosed().toPromise();
+
+      if (!dialogRes) {
         return;
       }
-      this.customersService.delete(customerId)
-      .subscribe(
-        () => {
-          this.getCustomers();
-        },
-        () => { }
-      );
-    });
+
+      await this.customersService.edit(dialogRes).toPromise();
+
+      this.getCustomers();
+    } catch (err) {}
   }
 
   addCustomer() {
@@ -144,7 +167,6 @@ export class CustomersComponent implements OnInit {
   onPageEv(pageEvent: PageEvent) {
     this.pageEvent = pageEvent;
     this.getCustomers();
-    console.log(this.pageEvent);
   }
 
   onCardEnter(id: number) {
