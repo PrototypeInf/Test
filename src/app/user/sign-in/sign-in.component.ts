@@ -37,7 +37,7 @@ export class SignInComponent implements OnInit {
   onSubmit() {
     const email = this.loginrForm.get('email').value;
     const password = this.loginrForm.get('password').value;
-    this.userService.userAuthentication(email, password).subscribe(() => {}, () => {});
+    this.userService.userAuthentication(email, password).toPromise();
   }
 
 }

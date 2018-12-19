@@ -5,6 +5,7 @@ import { CustomersService } from '../customers.service';
 import { UserService } from 'src/app/user/user.service';
 import { OrderService } from 'src/app/order/order.service';
 import { ConfirmPopupData, ConfirmPopupComponent } from 'src/app/Shared/confirm-popup/confirm-popup.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export interface CustomerOrdersPopupData {
   CustomersId: number;
@@ -38,51 +39,38 @@ export class CustomerOrdersPopupComponent implements OnInit {
     }
   }
 
-  updateOrderList() {
-    this.customersService.getOrderList(this.datas.CustomersId)
-      .subscribe(
-        (httpRes) => {
-          this.datas.data = httpRes;
-          this.ProductName = undefined;
-          this.Price = undefined;
-        },
-        () => { }
-      );
+  async updateOrderList() {
+    const httpRes = await this.customersService.getOrderList(this.datas.CustomersId).toPromise();
+
+    this.datas.data = httpRes;
+    this.ProductName = undefined;
+    this.Price = undefined;
   }
-  onDeleteOrder(orderId) {
+  async onDeleteOrder(orderId) {
     const dataSend: ConfirmPopupData = {
       message: 'Confirm order removal'
     };
-    this.dialog.open(ConfirmPopupComponent, {
+    const dialogRes = await this.dialog.open(ConfirmPopupComponent, {
       data: dataSend
-    })
-      .afterClosed().subscribe(result => {
-        if (!result) {
-          return;
-        }
-        this.orderService.delete(orderId).subscribe(
-          () => {
-            this.updateOrderList();
-          },
-          () => { }
-        );
-      });
+    }).afterClosed().toPromise();
+
+    if (!dialogRes) {
+      return;
+    }
+
+    await this.orderService.delete(orderId).toPromise();
+    this.updateOrderList();
   }
 
-  onAddOrder() {
+  async onAddOrder() {
     const order: Order = {
       CustomersId: this.datas.CustomersId,
       ProductName: this.ProductName,
       Price: this.Price
     };
 
-    this.customersService.setCustomerOrder(order)
-      .subscribe(
-        () => {
-          this.updateOrderList();
-        },
-        () => { }
-      );
+    await this.customersService.setCustomerOrder(order).toPromise();
+    this.updateOrderList();
   }
 
   onNoClick(): void {

@@ -43,10 +43,8 @@ export class OrderComponent implements OnInit {
   }
 
   async getOrders() {
-    try {
-      const httpRes = await this.oderService.getAll().toPromise();
-      this.initPage(httpRes);
-    } catch (err) { }
+    const httpRes = await this.oderService.getAll().toPromise();
+    this.initPage(httpRes);
   }
 
   initPage(data: OrdersRespondGroup) {
@@ -55,11 +53,9 @@ export class OrderComponent implements OnInit {
   }
 
   async onSearch(txt) {
-    try {
-      this.searchTxt = txt;
-      const httpRes = await this.oderService.search(txt).toPromise();
-      this.initPage(httpRes);
-    } catch (err) { }
+    this.searchTxt = txt;
+    const httpRes = await this.oderService.search(txt).toPromise();
+    this.initPage(httpRes);
   }
 
   onPageEv(pageEvent: PageEvent) {

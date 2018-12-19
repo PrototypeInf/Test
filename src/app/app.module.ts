@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +25,7 @@ import { CustomerOrdersPopupComponent } from './customers/customer-orders-popup/
 import { CustomerEditPopupComponent } from './customers/customer-edit-popup/customer-edit-popup.component';
 import { OrderComponent } from './order/order.component';
 import { ConfirmPopupComponent } from './Shared/confirm-popup/confirm-popup.component';
+import { GlobalErrorHandler } from './global-error-handler';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,10 @@ import { ConfirmPopupComponent } from './Shared/confirm-popup/confirm-popup.comp
     )
   ],
   providers: [
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    },
     CustomersService,
     GlobalSettingsService,
     UserService,

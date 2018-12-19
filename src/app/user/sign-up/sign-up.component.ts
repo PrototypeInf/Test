@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { User } from '../user.model';
 import { UserService } from '../user.service';
 import { AppService } from 'src/app/app.service';
-import { ToastrService  } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sign-up',
@@ -34,16 +34,11 @@ export class SignUpComponent implements OnInit {
       Name: ''
     };
   }
-  onSubmit(form: NgForm) {
-    this.userService.registerUser(this.signUpForm)
-      .subscribe((data: any) => {
-        if (data.Succeeded === true) {
-          this.registered_Ev.emit(true);
-          this.reset(form);
-        }
-      },
-        err => {
-        }
-      );
+  async onSubmit(form: NgForm) {
+    const data = await this.userService.registerUser(this.signUpForm).toPromise();
+    if (data.Succeeded === true) {
+      this.registered_Ev.emit(true);
+      this.reset(form);
+    }
   }
 }

@@ -7,6 +7,7 @@ import { CustomerOrdersPopupComponent } from './customer-orders-popup/customer-o
 import { CustomerEditPopupComponent, CustomerEditPopupData } from './customer-edit-popup/customer-edit-popup.component';
 import { UserService } from '../user/user.service';
 import { ConfirmPopupComponent, ConfirmPopupData } from '../Shared/confirm-popup/confirm-popup.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-customers',
@@ -47,51 +48,44 @@ export class CustomersComponent implements OnInit {
     }, 0);
   }
 
-  deleteCustomer(customerId) {
+  async deleteCustomer(customerId) {
     const dataSend: ConfirmPopupData = {
       message: 'Confirm customer removal'
     };
-    this.dialog.open(ConfirmPopupComponent, {
+    const dialogRes = await this.dialog.open(ConfirmPopupComponent, {
       data: dataSend
-    })
-      .afterClosed().subscribe(result => {
-        if (!result) {
-          return;
-        }
-        this.customersService.delete(customerId)
-          .subscribe(
-            () => {
-              this.getCustomers();
-            },
-            () => { }
-          );
-      });
+    }).afterClosed().toPromise();
+
+    if (!dialogRes) {
+      return;
+    }
+
+    await this.customersService.delete(customerId).toPromise();
+    this.getCustomers();
   }
 
   async editCustomer(customerId) {
-    try {
-      const customer = await this.customersService.get(customerId).toPromise();
-      const sendData: CustomerEditPopupData = {
-        title: 'Edit customer',
-        message: `Edit customer with Id - ${customer.Id}`,
-        data: customer
-      };
+    const customer = await this.customersService.get(customerId).toPromise();
+    const sendData: CustomerEditPopupData = {
+      title: 'Edit customer',
+      message: `Edit customer with Id - ${customer.Id}`,
+      data: customer
+    };
 
-      const dialogRes = await this.dialog.open(CustomerEditPopupComponent, {
-        data: sendData
-      }).afterClosed().toPromise();
+    const dialogRes = await this.dialog.open(CustomerEditPopupComponent, {
+      data: sendData
+    }).afterClosed().toPromise();
 
-      if (!dialogRes) {
-        return;
-      }
+    if (!dialogRes) {
+      return;
+    }
 
-      await this.customersService.edit(dialogRes).toPromise();
+    await this.customersService.edit(dialogRes).toPromise();
 
-      this.getCustomers();
-    } catch (err) {}
+    this.getCustomers();
   }
 
-  addCustomer() {
+  async addCustomer() {
     const sendData: CustomerEditPopupData = {
       title: 'New customer',
       message: 'Add a new customer',
@@ -101,43 +95,33 @@ export class CustomersComponent implements OnInit {
       }
     };
 
-    this.dialog.open(CustomerEditPopupComponent, {
+    const dialodRes = await this.dialog.open(CustomerEditPopupComponent, {
       panelClass: 'popup',
       data: sendData
-    })
-      .afterClosed().subscribe(res => {
-        if (res) {
-          this.customersService.add(res)
-            .subscribe(
-              (httpRes) => {
-                this.getCustomers();
-              },
-              () => {
-              }
-            );
-        }
-      });
+    }).afterClosed().toPromise();
+
+    if (!dialodRes) {
+      return;
+    }
+
+    await this.customersService.add(dialodRes).toPromise();
+    this.getCustomers();
   }
 
   setPageType(pageType) {
     this.pageType = pageType;
   }
 
-  ordersListShow(customerId): void {
-    this.customersService.getOrderList(customerId)
-      .subscribe((res) => {
-        this.dialog.open(CustomerOrdersPopupComponent, {
-          minWidth: '300px',
-          width: '40%',
-          data: {
-            CustomersId: customerId,
-            data: res
-          }
-        });
-      },
-        err => {
-        }
-      );
+  async ordersListShow(customerId) {
+    const res = await this.customersService.getOrderList(customerId).toPromise();
+    this.dialog.open(CustomerOrdersPopupComponent, {
+      minWidth: '300px',
+      width: '40%',
+      data: {
+        CustomersId: customerId,
+        data: res
+      }
+    });
   }
 
   initPage(data: CustomersRespond) {
@@ -145,12 +129,10 @@ export class CustomersComponent implements OnInit {
     this.customers = data.Data;
   }
 
-  onSearch(txt) {
+  async onSearch(txt) {
     this.searchTxt = txt;
-    this.customersService.search(txt)
-      .subscribe((res) => {
-        this.initPage(res);
-      });
+    const res = await this.customersService.search(txt).toPromise();
+    this.initPage(res);
   }
 
   setRange() {
@@ -159,15 +141,9 @@ export class CustomersComponent implements OnInit {
     this.customersService.setAmountOfData(Start, Length);
   }
 
-  getCustomers() {
-    this.customersService.getAll()
-      .subscribe(
-        (res) => {
-          this.initPage(res);
-        },
-        err => {
-        }
-      );
+  async getCustomers() {
+    const res = await this.customersService.getAll().toPromise();
+    this.initPage(res);
   }
 
   onPageEv(pageEvent: PageEvent) {
