@@ -26,6 +26,7 @@ import { CustomerEditPopupComponent } from './customers/customer-edit-popup/cust
 import { OrderComponent } from './order/order.component';
 import { ConfirmPopupComponent } from './Shared/confirm-popup/confirm-popup.component';
 import { GlobalErrorHandler } from './global-error-handler';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { GlobalErrorHandler } from './global-error-handler';
     CustomerOrdersPopupComponent,
     CustomerEditPopupComponent,
     OrderComponent,
-    ConfirmPopupComponent
+    ConfirmPopupComponent,
+    StatisticsComponent
   ],
   imports: [
     FormsModule,

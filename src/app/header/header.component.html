@@ -2,6 +2,7 @@
   <mat-toolbar-row>
     <button mat-button routerLink="/customers">Customers</button>
     <button mat-button routerLink="/orders">Orders</button>
+    <button mat-button routerLink="/statistics">Statistics</button>
     <span class="spacer"></span>
     <button *ngIf="!isAuterized" routerLink="/sign" mat-button>Sign in/up</button>
     <button *ngIf="isAuterized" (click)="logOff()" mat-button>Log off</button>

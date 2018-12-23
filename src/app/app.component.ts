@@ -11,7 +11,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     public appService: AppService,
     private userService: UserService
-    ) {}
+  ) { }
 
   get loading() { return this.appService.loading; }
 
